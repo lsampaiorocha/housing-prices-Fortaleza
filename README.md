@@ -5,6 +5,13 @@ The goal is to perform **data cleaning, exploratory analysis, statistical testin
 
 ---
 
+## Author
+
+**Leonardo Sampaio Rocha**  
+PhD in Computer Science | Data Scientist & ML Engineer  
+
+---
+
 ## About Fortaleza
 
 Fortaleza is the capital of the state of Ceará, located in Northeast Brazil, and one of the country’s largest urban centers with more than 2.6 million inhabitants.  
@@ -62,11 +69,6 @@ The dataset is publicly available through the **Prefeitura de Fortaleza Open Dat
 - Add results (figures, metrics) in `results/`.
 - Extend the notebook into a full ML pipeline.
 
----
 
-## Author
-
-**Leonardo Sampaio Rocha**  
-PhD in Computer Science | Data Scientist & ML Engineer  
 
 ---
