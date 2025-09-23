@@ -1,30 +1,32 @@
 # Housing Prices in Fortaleza/Brazil – Data Science & ML Project
 
 This repository explores **real estate transactions in Fortaleza, Brazil** (ITBI dataset).  
-The goal is to perform **data cleaning, exploratory analysis, statistical testing, and predictive modeling** of property values using modern **data science and machine learning techniques**.  
+The goal is to perform **data cleaning, exploratory analysis, statistical testing, and predictive modeling** of property values using data science and machine learning techniques.  
 
 ---
 
 ## About Fortaleza
 
-**Fortaleza** is the capital of the state of Ceará, located in Northeast Brazil, and one of the country’s largest urban centers with more than **2.6 million inhabitants**.  
-As a coastal city with strong economic, touristic, and cultural activity, Fortaleza has a highly dynamic **real estate market**.  
+Fortaleza is the capital of the state of Ceará, located in Northeast Brazil, and one of the country’s largest urban centers with more than 2.6 million inhabitants.  
+As a coastal city with strong economic, touristic, and cultural activity, Fortaleza has a highly dynamic real estate market.  
 
 The dataset used here reflects **property transactions subject to ITBI** (Imposto sobre Transmissão de Bens Imóveis), a municipal tax applied when property ownership is transferred.  
-Analyzing this dataset provides insights into **housing prices, urban development, and investment opportunities** in Fortaleza.
+Analyzing this dataset provides insights into housing prices, urban development, and investment opportunities in Fortaleza.
 
 ---
 
 ## Repository Structure
 
+```
 project-name/
-│── data/ # Raw or processed datasets (not included in repo)
-│── models/ # Trained ML models (to be added)
+│── data/          # Raw or processed datasets (not included in repo)
+│── models/        # Trained ML models (to be added)
 │── notebooks/
-│ └── analysis.ipynb # Main notebook with step-by-step exploration
-│── results/ # Generated plots, tables, and reports
-│── src/ # Source code (data processing, modeling, utilities)
-│── README.md # Project overview (this file)
+│   └── analysis.ipynb   # Main notebook with step-by-step exploration
+│── results/       # Generated plots, tables, and reports
+│── src/           # Source code (data processing, modeling, utilities)
+│── README.md      # Project overview (this file)
+```
 
 
 At the moment, the main work is concentrated in the notebook:
