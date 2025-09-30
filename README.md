@@ -69,6 +69,4 @@ The dataset is publicly available through the **Prefeitura de Fortaleza Open Dat
 - Add results (figures, metrics) in `results/`.
 - Extend the notebook into a full ML pipeline.
 
-
-
 ---
