@@ -1,72 +1,187 @@
-# Housing Prices in Fortaleza/Brazil – Data Science & ML Project
+# Housing Prices in Fortaleza, Brazil — Data Science, Machine Learning, and Model Serving
 
-This repository explores **real estate transactions in Fortaleza, Brazil** (ITBI dataset).  
-The goal is to perform **data cleaning, exploratory analysis, statistical testing, and predictive modeling** of property values using data science and machine learning techniques.  
+This repository explores **real estate transactions in Fortaleza, Brazil**, using the **ITBI dataset** to analyze, model, and deploy predictive systems for estimating housing prices.  
+
+The project covers the complete lifecycle of a machine learning solution:  
+from **data cleaning** and **exploratory analysis (EDA)**, through **training and evaluating models**, to **exporting models to ONNX format** and **serving them with NVIDIA Triton Inference Server** inside a Dockerized environment.
 
 ---
 
 ## Author
-
 **Leonardo Sampaio Rocha**  
-PhD in Computer Science | Data Scientist & ML Engineer  
+PhD in Computer Science | AI/ML Engineer  
 
 ---
 
-## About Fortaleza
+## Project Overview
 
-Fortaleza is the capital of the state of Ceará, located in Northeast Brazil, and one of the country’s largest urban centers with more than 2.6 million inhabitants.  
-As a coastal city with strong economic, touristic, and cultural activity, Fortaleza has a highly dynamic real estate market.  
+Fortaleza, the capital of Ceará (Brazil), is a large coastal city with a dynamic real estate market.  
+The dataset used in this project — the **ITBI Real Estate Transactions Dataset** — includes property transactions subject to the municipal ITBI tax, offering rich information on market behavior, property characteristics, and transaction values.  
 
-The dataset used here reflects **property transactions subject to ITBI** (Imposto sobre Transmissão de Bens Imóveis), a municipal tax applied when property ownership is transferred.  
-Analyzing this dataset provides insights into housing prices, urban development, and investment opportunities in Fortaleza.
+This project investigates how machine learning models can learn patterns from this dataset to estimate property prices and automate valuation processes.
 
 ---
 
 ## Repository Structure
 
 ```
-project-name/
-│── data/          # Raw or processed datasets (not included in repo)
-│── models/        # Trained ML models (to be added)
-│── notebooks/
-│   └── analysis.ipynb   # Main notebook with step-by-step exploration
-│── results/       # Generated plots, tables, and reports
-│── src/           # Source code (data processing, modeling, utilities)
-│── README.md      # Project overview (this file)
+housing-prices-Fortaleza/
+│
+├── data/
+│   ├── raw/                     # Original dataset (ITBI public data)
+│   │   └── dados_abertos_itbi_transacoes_imobiliarias.csv
+│   └── processed/               # Cleaned and transformed data
+│       └── processed_data.csv
+│
+├── notebooks/
+│   └── analysis.ipynb           # EDA and model training steps
+│
+├── models/
+│   ├── preprocessor.pkl         # Trained preprocessing pipeline
+│   └── decision_tree/
+│       ├── config.pbtxt         # Triton model configuration
+│       └── 1/
+│           └── model.onnx       # Decision Tree model in ONNX format
+│
+├── results/                     # Generated plots and figures
+│   ├── Decision_Tree.png
+│   ├── Linear Regression.png
+│   ├── Pairwise correlations.png
+│   ├── Dunns post hoc test.png
+│   ├── Numeric features versus target.png
+│   └── XGBoost.png
+│
+├── test/
+│   └── client_test.py           # Python script for inference testing
+│
+├── Dockerfile                   # Image build for Triton model serving
+├── docker-compose.yml           # Service orchestration
+├── requirements.txt             # Python dependencies
+└── README.md                    # Project documentation
 ```
 
+---
 
-At the moment, the main work is concentrated in the notebook:
+## Pipeline Description
 
-- **`notebooks/analysis.ipynb`** → Contains the end-to-end exploratory data analysis and first experiments.
+### 1. Data Cleaning and Transformation
+The raw ITBI dataset was cleaned and standardized through:
+- Conversion of date fields and normalization of numeric attributes.  
+- Removal of inconsistent or missing records.  
+- Detection and treatment of outliers in property values.  
+- Feature encoding for categorical variables such as *bairro* (neighborhood).
+
+The cleaned dataset is stored under `data/processed/processed_data.csv`.
 
 ---
 
-## Objectives
-
-- Explore property transaction data (ITBI Fortaleza).
-- Clean and preprocess the dataset (dates, values, missing data, outliers).
-- Perform exploratory data analysis (EDA):
-  - Property values per neighborhood.
-  - Temporal trends in transactions.
-  - Usage types and construction patterns.
-- Apply statistical testing (normality, variance homogeneity, ANOVA/Welch).
-- Build regression and classification models to predict housing prices.
+### 2. Exploratory Data Analysis (EDA)
+Performed using **Pandas**, **Matplotlib**, and **Seaborn** to identify:
+- Distribution of transactions per neighborhood and construction type.  
+- Correlation between variables and sale values.  
 
 ---
 
-## Dataset
+### 3. Model Training and Evaluation
+Multiple supervised learning models were trained and compared, including:
+- **Linear Regression**
+- **Decision Tree Regressor**
+- **XGBoost Regressor**
 
-The dataset is publicly available through the **Prefeitura de Fortaleza Open Data portal**:  
-[ITBI Real Estate Transactions Dataset](https://dados.fortaleza.ce.gov.br/dataset/dados_abertos_itbi_transacoes_imobiliarias/resource/46324d49-9809-4d32-8e5c-b4b570f067ce)
+Each model was evaluated using:
+- **MAE (Mean Absolute Error)**
+- **RMSE (Root Mean Squared Error)**
+- **R² Score**
+
+The Decision Tree Regressor was selected for deployment based on interpretability and performance balance.
 
 ---
 
-## Next Steps
+### 4. Exporting the Model to ONNX
+The trained model was converted to the **ONNX format** for production deployment using the ONNX Runtime.  
+Only the trained regressor was exported; the preprocessing pipeline (`preprocessor.pkl`) is loaded separately during inference.
 
-- Move reusable code (preprocessing, modeling) into `src/`.
-- Save trained models under `models/`.
-- Add results (figures, metrics) in `results/`.
-- Extend the notebook into a full ML pipeline.
+ONNX file location:
+```
+models/decision_tree/1/model.onnx
+```
 
 ---
+
+### 5. Deployment with NVIDIA Triton Inference Server
+The project includes a full **Docker-based inference environment**.  
+Triton automatically loads the exported model and exposes HTTP and gRPC endpoints for inference.
+
+#### Key Files
+- **`Dockerfile`**: Builds a custom image based on Triton and installs required Python packages.  
+- **`docker-compose.yml`**: Defines the Triton service with exposed ports.  
+- **`config.pbtxt`**: Model configuration specifying input/output tensors and dimensions.
+
+---
+
+## Technologies Used
+
+- **Python 3.11**
+- **Pandas, NumPy, Scikit-learn, XGBoost**
+- **Matplotlib, Seaborn** (EDA and visualization)
+- **ONNX & ONNX Runtime**
+- **NVIDIA Triton Inference Server**
+- **Docker / Docker Compose**
+
+---
+
+## Build and Run Instructions
+
+### 1. Build the Docker image
+```bash
+docker compose build
+```
+
+### 2. Start the Triton Inference Server
+```bash
+docker compose up
+```
+
+This will:
+- Launch the Triton container.
+- Automatically load the model from `/models/decision_tree`.
+- Expose the following ports:
+  - `8000`: HTTP endpoint  
+  - `8001`: gRPC endpoint  
+  - `8002`: Metrics endpoint  
+
+### 3. Verify the model is loaded
+```bash
+curl -X POST localhost:8000/v2/repository/index
+```
+
+Expected output:
+```json
+[{"name":"decision_tree","version":"1","state":"READY"}]
+```
+
+### 4. Run inference (example)
+```bash
+curl -X POST localhost:8000/v2/models/decision_tree/infer \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputs": [
+      {
+        "name": "input",
+        "shape": [1, 3],
+        "datatype": "FP32",
+        "data": [[120.0, 15.0, 1.0]]
+      }
+    ],
+    "outputs": [{"name": "variable"}]
+  }'
+```
+
+Or use the provided test script:
+```bash
+python test/client_test.py
+```
+
+---
+
+This setup demonstrates an **end-to-end data science workflow**, from **data preparation and modeling** to **ONNX-based deployment** with **Triton Inference Server** for production-grade model serving.

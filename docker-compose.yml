@@ -1,0 +1,13 @@
+services:
+  triton:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: triton_onnx_server
+    ports:
+      - "8000:8000"  # HTTP endpoint
+      - "8001:8001"  # gRPC endpoint
+      - "8002:8002"  # metrics
+    volumes:
+      - ./models:/models
+    restart: unless-stopped
